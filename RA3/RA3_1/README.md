@@ -43,7 +43,7 @@ El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/CSP` 
 
 Además, la imagen generada con esta configuración está disponible en Docker Hub en el siguiente enlace: 
 
-**[apache-hardening en Docker Hub](URL_DE_DOCKER_HUB)**
+**[apache-hardening en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening)**
 
 ### Verificación de CSP
 
