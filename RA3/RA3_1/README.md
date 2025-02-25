@@ -10,10 +10,10 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 
 ## Tasks
 
-* [Práctica 1: CSP](#practica-1-csp)
-* [Práctica 2: Web Application Firewall](#practica-2-web-application-firewall)
-* [Práctica 3: OWASP](#practica-3-owasp)
-* [Práctica 4: Evitar ataques DDOS](#practica-4-evitar-ataques-ddos)
+* [Práctica 1: CSP](#práctica-1-content-security-policy-csp)
+* [Práctica 2: Web Application Firewall](#práctica-2-web-application-firewall-waf)
+* [Práctica 3: OWASP](#práctica-3-owasp)
+* [Práctica 4: Evitar ataques DDOS](#práctica-4-evitar-ataques-dos)
 
 ---
 
