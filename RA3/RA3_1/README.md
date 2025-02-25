@@ -10,14 +10,14 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 
 ## Tasks
 
-* [Práctica 1: CSP](#práctica-1-content-security-policy-csp)
+* [Práctica 1: CSP](##📌-Práctica-1:-Content-Security-Policy-(CSP))
 * [Práctica 2: Web Application Firewall](#práctica-2-web-application-firewall-waf)
 * [Práctica 3: OWASP](#práctica-3-owasp)
 * [Práctica 4: Evitar ataques DDOS](#práctica-4-evitar-ataques-dos)
 
 ---
 
-## **📌 Práctica 1: Content Security Policy (CSP)**
+## **📌-Práctica-1:-Content-Security-Policy-(CSP)**
 
 ### **Introducción**
 Content Security Policy (CSP) es un mecanismo de seguridad que permite definir reglas estrictas sobre qué contenido puede ser cargado en una página web. Esto ayuda a mitigar ataques como **Cross-Site Scripting (XSS)** e inyección de contenido malicioso, protegiendo la integridad del sitio y la información del usuario.  
