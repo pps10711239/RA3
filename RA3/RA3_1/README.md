@@ -99,6 +99,49 @@ Este comportamiento indica que el firewall ha detectado e impedido la ejecución
 
 ---
 
+## Práctica 3: OWASP
+
+### Introducción
+
+Para reforzar la seguridad de Apache contra los ataques más comunes de aplicaciones web, se ha implementado **ModSecurity** con el conjunto de reglas de **OWASP Core Rule Set (CRS)**. Este conjunto de reglas protege contra inyección SQL, XSS, ejecución remota de código y otros ataques listados en el **OWASP Top 10**.
+
+### Configuración de OWASP CRS en Apache
+
+1. Se instala ModSecurity y el OWASP CRS.
+2. Se habilita el motor de reglas de ModSecurity (`SecRuleEngine On`).
+3. Se clonan las reglas OWASP desde el repositorio oficial y se configuran en Apache.
+4. Se añade una regla personalizada para bloquear peticiones sospechosas.
+
+### Implementación en Docker
+
+El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/OWASP` dentro del repositorio. Allí también se encuentran los archivos `security2.conf` y `setup_modsecurity`, además de capturas de pantalla que evidencian el proceso de configuración y pruebas.
+
+La imagen Docker generada con esta configuración está disponible en:
+
+**[apache-hardening-owasp en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening-owasp)**
+
+### Verificación de OWASP CRS
+
+Para comprobar que el WAF con reglas OWASP está funcionando correctamente, se puede probar con una petición que simule un ataque SQLi o XSS.
+
+Ejemplo de prueba con `curl` para simular una inyección SQL:
+
+```sh
+curl -X GET "http://localhost/index.html?id=' OR '1'='1' --"
+```
+
+Salida esperada:
+
+```
+HTTP/1.1 403 Forbidden
+```
+
+Este resultado indica que el firewall ha detectado la inyección SQL y ha bloqueado la solicitud.
+
+
+
+---
+
 
 Con esta configuración, se mejora la seguridad del servidor Apache al restringir las fuentes desde donde se pueden cargar los recursos, mitigando así ataques XSS y de inyección de código.
 
