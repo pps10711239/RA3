@@ -17,47 +17,110 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 
 ---
 
-## Práctica 1: Content Security Policy (CSP)
+## **📌 Práctica 1: Content Security Policy (CSP)**
 
-### Introducción
+### **Introducción**
+Content Security Policy (CSP) es un mecanismo de seguridad que permite definir reglas estrictas sobre qué contenido puede ser cargado en una página web. Esto ayuda a mitigar ataques como **Cross-Site Scripting (XSS)** e inyección de contenido malicioso, protegiendo la integridad del sitio y la información del usuario.  
 
-Content Security Policy (CSP) es una política de seguridad que restringe el origen de los recursos que un navegador puede cargar en una página web. Ayuda a prevenir ataques como Cross-Site Scripting (XSS) e inyecciones de contenido malicioso.
+En esta práctica, se ha implementado CSP en Apache dentro de un contenedor Docker para reforzar la seguridad en la entrega de contenido web.
 
-### Configuración de CSP en Apache
+---
 
-Para implementar CSP en Apache, se configura la directiva en el archivo de configuración del sitio seguro (`default-ssl.conf`):
+### **📌 Configuración de CSP en Apache**
+Para aplicar **CSP** en Apache, se ha configurado la directiva en el archivo de configuración del sitio seguro (`default-ssl.conf`):
 
 ```apache
 Header set Content-Security-Policy "default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com"
 ```
 
-Esta configuración establece:
-- `default-src 'self'`: El contenido solo puede cargarse desde el mismo origen.
-- `img-src *`: Permite cargar imágenes desde cualquier origen.
-- `media-src media1.com media2.com`: Los archivos de medios solo pueden provenir de `media1.com` y `media2.com`.
-- `script-src userscripts.example.com`: Solo se permite ejecutar scripts desde `userscripts.example.com`.
+📌 **Explicación de la configuración:**  
+- **`default-src 'self'`** → Solo permite cargar contenido desde el mismo dominio (evita scripts externos).  
+- **`img-src *`** → Permite la carga de imágenes desde cualquier origen.  
+- **`media-src media1.com media2.com`** → Los archivos de medios solo pueden provenir de `media1.com` y `media2.com`.  
+- **`script-src userscripts.example.com`** → Solo permite ejecutar scripts desde `userscripts.example.com`.  
 
-### Implementación en Docker
+---
 
-El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/CSP` dentro del repositorio. No es necesario incluirlo aquí, pero puedes acceder a él en el repositorio para más detalles.
+### **📌 Implementación en Docker**
+Para hacer esta configuración **persistente y fácilmente replicable**, se ha definido en un `Dockerfile` ubicado en:  
+📂 `assets/CSP/Dockerfile`  
 
-Además, la imagen generada con esta configuración está disponible en Docker Hub en el siguiente enlace: 
+Este Dockerfile incluye la configuración de **Apache con CSP habilitado** y la generación de un certificado SSL autofirmado para asegurar la comunicación HTTPS.
 
-**[apache-hardening en Docker Hub](https://hub.docker.com/r/pps10711239/pr1)**
+📌 **La imagen resultante con esta configuración está disponible en Docker Hub:**  
+👉 **[apache-hardening en Docker Hub](https://hub.docker.com/r/pps10711239/pr1)**  
 
-### Verificación de CSP
+---
 
-Para verificar que CSP está aplicado correctamente, se puede ejecutar el siguiente comando:
+### **📌 Generación de un certificado SSL autofirmado**
+Para habilitar HTTPS en Apache y aplicar CSP de manera segura, se generó un certificado SSL autofirmado utilizando OpenSSL.  
+Se ejecutó el siguiente comando dentro del contenedor:
 
 ```sh
+mkdir /etc/apache2/ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout /etc/apache2/ssl/apache-selfsigned.key \
+  -out /etc/apache2/ssl/apache-selfsigned.crt \
+  -subj "/C=ES/ST=Valencia/L=Valencia/O=Seguridad/OU=IT/CN=localhost"
+```
+
+📌 **Esto crea un certificado válido por 1 año** y lo almacena en `/etc/apache2/ssl/`.
+
+---
+
+### **📌 Modificación del VirtualHost para HTTPS**
+En el archivo `/etc/apache2/sites-available/default-ssl.conf` se añadieron las siguientes líneas para configurar **SSL y CSP**:
+
+```apache
+SSLCertificateFile /etc/apache2/ssl/apache-selfsigned.crt
+SSLCertificateKeyFile /etc/apache2/ssl/apache-selfsigned.key
+
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+Header set Content-Security-Policy "default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com"
+```
+
+📌 **Explicación:**  
+✔ **SSL:** Se especifica el uso del certificado y la clave privada generados.  
+✔ **HSTS (`Strict-Transport-Security`)**: Obliga a los navegadores a utilizar HTTPS en futuras conexiones.  
+✔ **CSP:** Se aplica la política de seguridad establecida previamente.
+
+---
+
+### **📌 Verificación de CSP**
+Para verificar que CSP se está aplicando correctamente, se utilizó **`curl`** con los siguientes comandos:
+
+```sh
+curl -I http://localhost
 curl -I https://localhost --insecure
 ```
 
-La salida esperada incluirá la cabecera `Content-Security-Policy`:
-
+📌 **Salida esperada:**  
 ```
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com
 ```
+
+Esto confirma que **CSP está activo y funcionando correctamente** tanto en HTTP como en HTTPS.
+
+---
+
+### **📌 Evidencias (Capturas de pantalla)**
+Para documentar el proceso, se han incluido capturas de pantalla de cada paso:
+
+📌 **📷 Captura 1: Creación de la imagen Docker con CSP configurado**  
+![Captura 1](assets/CSP/Captura1.png)
+
+📌 **📷 Captura 2: Generación del certificado SSL con OpenSSL**  
+![Captura 2](assets/CSP/Captura2.png)
+
+📌 **📷 Captura 3: Configuración del archivo `default-ssl.conf`**  
+![Captura 3](assets/CSP/Captura3.png)
+
+📌 **📷 Captura 4: Verificación de CSP y HSTS con `curl`**  
+![Captura 4](assets/CSP/Captura4.png)
+
+---
 ## Práctica 2: Web Application Firewall (WAF)
 
 ### Introducción
