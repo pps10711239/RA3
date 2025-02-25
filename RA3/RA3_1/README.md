@@ -15,7 +15,8 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 3. [Práctica 2: Web Application Firewall (WAF)](#practica-2-web-application-firewall-waf)
 4. [Práctica 3: OWASP](#practica-3-owasp)
 5. [Práctica 4: Evitar ataques DoS](#practica-4-evitar-ataques-dos)
-6. [Autor](#autor)
+6. [Práctica 5: Instalación de Certificado SSL en Docker](#practica-5-instalacion-de-certificado-ssl-en-docker)
+7. [Autor](#autor)
 
 ---
 
@@ -522,9 +523,6 @@ Se accedió a `https://localhost/` desde un navegador y se verificó el certific
 ![Captura 2](assets/SSL/Captura2.png)
 
 ---
-
-
-
 
 Con esta configuración, se mejora la seguridad del servidor Apache al restringir las fuentes desde donde se pueden cargar los recursos, mitigando así ataques XSS y de inyección de código.
 
