@@ -217,50 +217,88 @@ Se incluyen capturas de pantalla que documentan cada paso del proceso:
 ---
 
 
-## Práctica 3: OWASP
+## **📌 Práctica 3: OWASP**
 
-### Introducción
+### **Introducción**
+Para reforzar la seguridad de Apache contra los ataques más comunes a aplicaciones web, se ha implementado **ModSecurity** con el conjunto de reglas **OWASP Core Rule Set (CRS)**.  
 
-Para reforzar la seguridad de Apache contra los ataques más comunes de aplicaciones web, se ha implementado **ModSecurity** con el conjunto de reglas de **OWASP Core Rule Set (CRS)**. Este conjunto de reglas protege contra inyección SQL, XSS, ejecución remota de código y otros ataques listados en el **OWASP Top 10**.
-
-### Configuración de OWASP CRS en Apache
-
-1. Se instala ModSecurity y el OWASP CRS.
-2. Se habilita el motor de reglas de ModSecurity (`SecRuleEngine On`).
-3. Se clonan las reglas OWASP desde el repositorio oficial y se configuran en Apache.
-4. Se añade una regla personalizada para bloquear peticiones sospechosas.
-
-### Implementación en Docker
-
-El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/OWASP` dentro del repositorio. Allí también se encuentran los archivos `security2.conf` y `setup_modsecurity`, además de capturas de pantalla que evidencian el proceso de configuración y pruebas.
-
-La imagen Docker generada con esta configuración está disponible en:
-
-**[apache-hardening-owasp en Docker Hub](https://hub.docker.com/r/pps10711239/pr3)**
-
-### Verificación de OWASP CRS
-
-Para comprobar que el WAF con reglas OWASP está funcionando correctamente, se puede probar con una petición que simule un ataque SQLi o XSS.
-
-Ejemplo de prueba con `curl` para simular una inyección SQL:
-
-```sh
-curl -X GET "http://localhost/index.html?id=' OR '1'='1' --"
-```
-
-Salida esperada:
-
-```
-HTTP/1.1 403 Forbidden
-```
-
-Este resultado indica que el firewall ha detectado la inyección SQL y ha bloqueado la solicitud.
-
-
+Este conjunto de reglas protege contra vulnerabilidades como:  
+✔ **Inyección SQL (SQLi)**  
+✔ **Cross-Site Scripting (XSS)**  
+✔ **Ejecución remota de código (RCE)**  
+✔ **Path traversal y otros ataques del OWASP Top 10**  
 
 ---
 
-Aquí tienes el apartado 4 **(Evitar ataques DoS)** completamente redactado e integrado con los pasos que seguiste, las capturas y el enlace a la imagen en Docker Hub. 🚀  
+### **📌 Configuración de OWASP CRS en Apache**
+Para implementar OWASP CRS en Apache, se realizaron los siguientes pasos:
+
+1️⃣ **Se instaló y activó el módulo `mod_security`**  
+   ```sh
+   a2enmod security2
+   ```
+   **Salida esperada:**
+   ```
+   Module security2 already enabled
+   ```
+
+2️⃣ **Se configuró el motor de reglas de ModSecurity para bloquear ataques**  
+   Se verificó que `SecRuleEngine` estaba activado en la configuración de ModSecurity:  
+   ```apache
+   SecRuleEngine On
+   ```
+
+3️⃣ **Se añadió una regla personalizada para bloquear solicitudes sospechosas**  
+   Se incluyó la siguiente regla en el archivo `/etc/apache2/sites-available/000-default.conf`:
+   ```apache
+   SecRule ARGS:testparam "@contains test" "id:123456,deny,status:403,msg:'Bloqueado por ModSecurity'"
+   ```
+   📌 **Esto significa que cualquier petición que incluya `testparam=test` será bloqueada con un error 403.**
+
+---
+
+### **📌 Implementación en Docker**
+Para que esta configuración sea replicable, se creó un **Dockerfile** ubicado en:  
+📂 `assets/OWASP/Dockerfile`
+
+📌 **La imagen resultante con OWASP CRS activado está disponible en Docker Hub:**  
+👉 **[apache-hardening-owasp en Docker Hub](https://hub.docker.com/r/pps10711239/pr3)**  
+
+---
+
+### **📌 Prueba de seguridad con OWASP CRS**
+Para verificar que **ModSecurity está bloqueando ataques correctamente**, se realizaron pruebas con `curl`:
+
+```sh
+curl -I "http://localhost/index.html?testparam=test"
+```
+📌 **Salida esperada:**  
+```
+HTTP/1.1 403 Forbidden
+```
+✅ **Esto confirma que la regla personalizada de OWASP CRS está funcionando.**  
+
+Se probaron otros intentos de ataque para validar la efectividad de ModSecurity:
+
+```sh
+curl -I "http://localhost/index.html?exec=/bin/bash"
+curl -I "http://localhost/index.html?exec=../../"
+```
+📌 **Todas las solicitudes fueron bloqueadas con error 403, indicando que OWASP CRS detectó intentos de ataque.**  
+
+---
+
+### **📌 Evidencias (Capturas de pantalla)**
+Se documentaron las pruebas realizadas con las siguientes imágenes:
+
+📌 **📷 Captura 1: Ejecución de `curl` con pruebas de ataque bloqueadas**  
+![Captura 1](assets/OWASP/Captura1.png)
+
+📌 **📷 Captura 2: Verificación del módulo `mod_security` en Apache**  
+![Captura 2](assets/OWASP/Captura2.png)
+
+📌 **📷 Captura 3: Configuración de la regla personalizada en `000-default.conf`**  
+![Captura 3](assets/OWASP/Captura3.png)
 
 ---
 
