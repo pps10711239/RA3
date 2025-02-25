@@ -64,4 +64,4 @@ Con esta configuración, se mejora la seguridad del servidor Apache al restringi
 ---
 
 ## Autor
-Este proyecto fue realizado por [Adrián López Olaria], aplicando medidas de hardening en Apache dentro de un contenedor Docker.
+Este proyecto fue realizado por **Adrián López Olaria**, aplicando medidas de hardening en Apache dentro de un contenedor Docker.
