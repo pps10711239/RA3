@@ -17,98 +17,49 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 
 ---
 
-## Práctica 1: CSP
+## Práctica 1: Content Security Policy (CSP)
 
 ### Introducción
 
-Content Security Policy (CSP) es una capa de seguridad adicional que previene ataques como Cross Site Scripting (XSS) y ataques de inyección de datos. Se logra restringiendo los orígenes de contenido que puede cargar el navegador.
+Content Security Policy (CSP) es una política de seguridad que restringe el origen de los recursos que un navegador puede cargar en una página web. Ayuda a prevenir ataques como Cross-Site Scripting (XSS) e inyecciones de contenido malicioso.
 
-![CSP](URL_IMG_CSP)
+### Configuración de CSP en Apache
 
-Ejemplo de configuración en Apache:
+Para implementar CSP en Apache, se configura la directiva en el archivo de configuración del sitio seguro (`default-ssl.conf`):
 
 ```apache
 Header set Content-Security-Policy "default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com"
 ```
 
----
+Esta configuración establece:
+- `default-src 'self'`: El contenido solo puede cargarse desde el mismo origen.
+- `img-src *`: Permite cargar imágenes desde cualquier origen.
+- `media-src media1.com media2.com`: Los archivos de medios solo pueden provenir de `media1.com` y `media2.com`.
+- `script-src userscripts.example.com`: Solo se permite ejecutar scripts desde `userscripts.example.com`.
 
-## Práctica 2: Web Application Firewall
+### Implementación en Docker
 
-### Introducción
+El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/CSP` dentro del repositorio. No es necesario incluirlo aquí, pero puedes acceder a él en el repositorio para más detalles.
 
-Un Web Application Firewall (WAF) filtra, supervisa y bloquea el tráfico HTTP entre una aplicación web y el usuario. Protege contra inyección SQL, XSS y CSRF.
+Además, la imagen generada con esta configuración está disponible en Docker Hub en el siguiente enlace: 
 
-![WAF](URL_IMG_WAF)
+**[apache-hardening en Docker Hub](URL_DE_DOCKER_HUB)**
 
-Ejemplo de instalación de ModSecurity en Apache:
+### Verificación de CSP
 
-```sh
-sudo apt install libapache2-mod-security2
-sudo cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
-sudo systemctl restart apache2
-```
-
----
-
-## Práctica 3: OWASP
-
-### Introducción
-
-OWASP proporciona reglas de seguridad para ModSecurity, protegiendo contra ataques comunes.
-
-![OWASP](URL_IMG_OWASP)
-
-Instalación de las reglas OWASP:
+Para verificar que CSP está aplicado correctamente, se puede ejecutar el siguiente comando:
 
 ```sh
-git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git
-sudo mv owasp-modsecurity-crs/rules/ /etc/modsecurity/
+curl -I https://localhost --insecure
 ```
 
-Verificar configuración en `/etc/apache2/mods-enabled/security2.conf`:
+La salida esperada incluirá la cabecera `Content-Security-Policy`:
 
-```apache
-Include /etc/modsecurity/rules/*.conf
+```
+Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com
 ```
 
----
-
-## Práctica 4: Evitar ataques DDOS
-
-### Introducción
-
-El módulo `mod_evasive` en Apache permite mitigar ataques de denegación de servicio (DoS).
-
-![DDoS](URL_IMG_DDOS)
-
-Instalación y configuración de `mod_evasive`:
-
-```sh
-sudo apt install libapache2-mod-evasive
-sudo nano /etc/apache2/mods-available/evasive.conf
-```
-
-Ejemplo de configuración:
-
-```apache
-DOSHashTableSize 2048
-DOSPageCount 10
-DOSSiteCount 50
-DOSBlockingPeriod 600
-```
-
-Reiniciar Apache:
-
-```sh
-sudo systemctl restart apache2
-```
-
-Prueba con `ab` para simular un ataque DoS:
-
-```sh
-ab -n 1000 -c 100 http://localhost/
-```
+Con esta configuración, se mejora la seguridad del servidor Apache al restringir las fuentes desde donde se pueden cargar los recursos, mitigando así ataques XSS y de inyección de código.
 
 ---
 
@@ -119,4 +70,3 @@ Si deseas mejorar esta configuración o agregar nuevas medidas de seguridad, ¡n
 
 ## Autor
 Este proyecto fue realizado por [Tu Nombre], aplicando medidas de hardening en Apache dentro de un contenedor Docker.
-
