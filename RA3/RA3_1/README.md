@@ -117,50 +117,105 @@ Para documentar el proceso, se han incluido capturas de pantalla de cada paso:
 📌 **📷 Captura 3: Configuración del archivo `default-ssl.conf`**  
 ![Captura 3](assets/CSP/Captura3.png)
 
-📌 **📷 Captura 4: Verificación de CSP y HSTS con `curl`**  
-![Captura 4](assets/CSP/Captura4.png)
+---
+
+## **📌 Práctica 2: Web Application Firewall (WAF)**
+
+### **Introducción**
+Un **Web Application Firewall (WAF)** es una solución de seguridad que supervisa, filtra y bloquea el tráfico HTTP para proteger aplicaciones web de **ataques como inyección SQL (SQLi), Cross-Site Scripting (XSS) y falsificación de peticiones entre sitios (CSRF)**.  
+
+Para esta práctica, se ha configurado Apache con **ModSecurity**, un firewall de aplicaciones web de código abierto ampliamente utilizado, junto con el **OWASP Core Rule Set (CRS)** para reforzar la seguridad del servidor.
 
 ---
-## Práctica 2: Web Application Firewall (WAF)
 
-### Introducción
+### **📌 Configuración de WAF en Apache**
+Para implementar WAF en Apache, se siguieron los siguientes pasos:
 
-Un Web Application Firewall (WAF) es un sistema de seguridad que supervisa, filtra y bloquea el tráfico HTTP para proteger aplicaciones web de ataques como inyección SQL (SQLi), Cross-Site Scripting (XSS) y falsificación de peticiones entre sitios (CSRF). En esta práctica, se ha configurado Apache con **ModSecurity**, un firewall de aplicaciones web de código abierto ampliamente utilizado.
+1️⃣ **Se instaló el módulo `mod_security` y se habilitó**:
+   ```sh
+   a2enmod security2
+   ```
+   **Salida esperada**:
+   ```
+   Module security2 already enabled
+   ```
 
-### Configuración de WAF en Apache
+2️⃣ **Se activó el OWASP CRS** en la configuración de ModSecurity.  
 
-Para implementar WAF en Apache, se han seguido estos pasos:
-1. Instalación del módulo ModSecurity y las reglas de OWASP Core Rule Set (CRS).
-2. Configuración de ModSecurity para bloquear ataques en lugar de solo detectarlos.
-3. Implementación de un archivo PHP (`post.php`) en el DocumentRoot para probar reglas de seguridad.
+3️⃣ **Se implementó un archivo PHP (`post.php`) en el DocumentRoot** para probar la efectividad de las reglas de seguridad:
 
-### Implementación en Docker
+   ```php
+   <?php
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+       echo "Entrada recibida: " . htmlspecialchars($_POST["data"]);
+   }
+   ?>
+   <form method="post">
+       <input type="text" name="data">
+       <button type="submit">Enviar</button>
+   </form>
+   ```
 
-El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/WAF` dentro del repositorio. Allí también están los archivos de configuración y capturas de pantalla del proceso. 
+---
 
-La imagen Docker generada con esta configuración está disponible en:
+### **📌 Implementación en Docker**
+Para hacer que esta configuración **sea persistente y replicable**, se ha definido en un **Dockerfile**, ubicado en:  
+📂 `assets/WAF/Dockerfile`  
 
-**[apache-hardening-waf en Docker Hub](https://hub.docker.com/r/pps10711239/pr2)**
+Este Dockerfile incluye la instalación de Apache, la activación de **ModSecurity** y la configuración de las reglas de seguridad.
 
-### Verificación del WAF
+📌 **La imagen resultante con esta configuración está disponible en Docker Hub:**  
+👉 **[apache-hardening-waf en Docker Hub](https://hub.docker.com/r/pps10711239/pr2)**  
 
-Para comprobar que ModSecurity está funcionando correctamente, se puede realizar una prueba enviando una solicitud maliciosa. Si el firewall está bien configurado, responderá con un código **403 Forbidden** bloqueando el intento de ataque.
+---
 
-Ejemplo de prueba con `curl`:
+### **📌 Prueba de funcionamiento**
+Para comprobar que **ModSecurity está bloqueando correctamente peticiones sospechosas**, se realizó una prueba enviando un **ataque XSS** mediante un `POST` con `curl`:
 
 ```sh
 curl -X POST http://localhost/post.php -d "<script>alert('XSS')</script>"
 ```
 
-Salida esperada:
-
+📌 **Salida esperada:**
 ```
 HTTP/1.1 403 Forbidden
 ```
+Esto confirma que **ModSecurity ha detectado el intento de inyección de código y lo ha bloqueado**.
 
-Este comportamiento indica que el firewall ha detectado e impedido la ejecución de un ataque XSS.
+📌 **También se verificó desde el navegador**, donde se intentó enviar una solicitud al archivo `post.php`, lo que resultó en un **error 403 Forbidden**, indicando que el acceso fue denegado.
 
 ---
+
+### **📌 Logs y Evidencia de Bloqueo**
+Para confirmar que **ModSecurity estaba registrando y bloqueando los intentos de ataque**, se revisaron los logs de Apache:
+
+```sh
+tail -f /var/log/apache2/error.log | grep ModSecurity
+```
+
+📌 **Salida esperada en los logs:**
+```
+[ModSecurity] Warning. Matched "Operator `Contains' ...
+[ModSecurity] Access denied with code 403 ...
+```
+Esto muestra que el firewall ha identificado y bloqueado el intento de ataque.
+
+---
+
+### **📌 Evidencias (Capturas de pantalla)**
+Se incluyen capturas de pantalla que documentan cada paso del proceso:
+
+📌 **📷 Captura 1: Activación del módulo `security2` en Apache**  
+![Captura 1](assets/WAF/Captura1.png)
+
+📌 **📷 Captura 2: Código de `post.php` utilizado para probar el firewall**  
+![Captura 2](assets/WAF/Captura2.png)
+
+📌 **📷 Captura 3: Respuesta HTTP 403 Forbidden al intentar acceder a `post.php`**  
+![Captura 3](assets/WAF/Captura3.png)
+
+---
+
 
 ## Práctica 3: OWASP
 
