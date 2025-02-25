@@ -11,7 +11,7 @@ Para ello, se implementarán estrategias de seguridad en capas que incluyen pol�
 ## Tasks
 
 1. [Introducción](#introducción)
-2. [Práctica 1: Content Security Policy (CSP)](#📌Práctica1:ContentSecurityPolicy(CSP))
+2. [Práctica 1: Content Security Policy (CSP)](#Práctica1:ContentSecurityPolicy(CSP))
 3. [Práctica 2: Web Application Firewall (WAF)](#práctica-2-web-application-firewall-waf)
 4. [Práctica 3: OWASP](#práctica-3-owasp)
 5. [Práctica 4: Evitar ataques DoS](#práctica-4-evitar-ataques-dos)
