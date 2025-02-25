@@ -423,9 +423,106 @@ A continuación, se presentan capturas de pantalla del proceso y los resultados 
 👉 **[pps10711239/pr4](https://hub.docker.com/r/pps10711239/pr4)**  
 
 ---
+## **📌 Práctica 5: Instalación de Certificado SSL en Docker**
 
-🚀 **¡Listo! Con esto queda completamente documentada la Práctica 4.**  
-Si necesitas algún ajuste, dime. 😎
+### **Introducción**
+En esta práctica se implementa un **certificado digital SSL/TLS** en un servidor Apache dentro de un **contenedor Docker**, asegurando que las comunicaciones entre clientes y el servidor sean **seguras y cifradas**.  
+
+El uso de **HTTPS** evita ataques como **Man-in-the-Middle (MITM)** y protege la privacidad de los usuarios al cifrar los datos transmitidos entre el cliente y el servidor.  
+
+---
+
+### **📌 Generación del Certificado SSL en Apache**
+Para habilitar **HTTPS** en Apache dentro del contenedor, se generó un **certificado autofirmado** con **OpenSSL**.  
+
+El siguiente comando crea un certificado válido por **1 año** en la ruta `/etc/apache2/ssl/` dentro del contenedor:
+
+```sh
+mkdir -p /etc/apache2/ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout /etc/apache2/ssl/apache-selfsigned.key \
+  -out /etc/apache2/ssl/apache-selfsigned.crt \
+  -subj "/C=ES/ST=Valencia/L=Valencia/O=Seguridad/OU=IT/CN=localhost"
+```
+
+📌 **Explicación:**  
+- Se genera un certificado **X.509** autofirmado.  
+- Se crea una **clave RSA de 2048 bits**.  
+- El certificado es válido por **365 días**.  
+- El `CN=localhost` indica que el certificado se usará para el dominio `localhost`.  
+
+📷 **Captura 1: Información del Certificado SSL en el navegador**  
+![Captura 1](assets/SSL/Captura1.png)
+
+---
+
+### **📌 Configuración de Apache para usar el Certificado**
+Para que **Apache** use el certificado generado, se editó el archivo de configuración del sitio **`default-ssl.conf`**:
+
+```apache
+SSLCertificateFile /etc/apache2/ssl/apache-selfsigned.crt
+SSLCertificateKeyFile /etc/apache2/ssl/apache-selfsigned.key
+
+<VirtualHost *:443>
+    ServerAdmin admin@example.com
+    ServerName localhost
+    DocumentRoot /var/www/html
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    SSLEngine on
+</VirtualHost>
+```
+
+📌 **Explicación:**  
+✔ **Se habilita SSL (`SSLEngine on`)** para el puerto **443**.  
+✔ **Se configuran los archivos del certificado** (`.crt`) y la clave privada (`.key`).  
+✔ **El sitio se servirá en `localhost` con HTTPS.**  
+
+---
+
+### **📌 Habilitación del Módulo SSL en Apache**
+Para activar **SSL** en Apache dentro del contenedor, se ejecutaron los siguientes comandos:
+
+```sh
+a2enmod ssl
+a2ensite default-ssl
+service apache2 restart
+```
+
+📌 **Salida esperada:**
+```
+Module ssl already enabled
+Site default-ssl already enabled
+ * Restarting Apache httpd web server apache2
+```
+
+Esto confirma que **SSL está activado correctamente** y que **Apache está sirviendo contenido en HTTPS**.
+
+---
+
+### **📌 Implementación en Docker**
+Para que esta configuración sea **persistente y replicable**, se creó un **Dockerfile**, ubicado en:  
+📂 `assets/SSL/Dockerfile`
+
+📌 **La imagen final con Apache y SSL configurado está disponible en Docker Hub:**  
+👉 **[apache-hardening-ssl en Docker Hub](https://hub.docker.com/r/pps10711239/pr5)**  
+
+---
+
+### **📌 Verificación del Certificado SSL**
+Se accedió a `https://localhost/` desde un navegador y se verificó el certificado.
+
+📌 **Salida esperada:**  
+✅ **El candado en la barra de direcciones indica que HTTPS está funcionando.**  
+✅ **Al ver el certificado, se muestra la información correcta del emisor.**  
+
+📷 **Captura 2: Página servida con HTTPS en el navegador**  
+![Captura 2](assets/SSL/Captura2.png)
+
+---
+
 
 
 
