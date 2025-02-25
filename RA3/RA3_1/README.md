@@ -58,6 +58,47 @@ La salida esperada incluirá la cabecera `Content-Security-Policy`:
 ```
 Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com
 ```
+## Práctica 2: Web Application Firewall (WAF)
+
+### Introducción
+
+Un Web Application Firewall (WAF) es un sistema de seguridad que supervisa, filtra y bloquea el tráfico HTTP para proteger aplicaciones web de ataques como inyección SQL (SQLi), Cross-Site Scripting (XSS) y falsificación de peticiones entre sitios (CSRF). En esta práctica, se ha configurado Apache con **ModSecurity**, un firewall de aplicaciones web de código abierto ampliamente utilizado.
+
+### Configuración de WAF en Apache
+
+Para implementar WAF en Apache, se han seguido estos pasos:
+1. Instalación del módulo ModSecurity y las reglas de OWASP Core Rule Set (CRS).
+2. Configuración de ModSecurity para bloquear ataques en lugar de solo detectarlos.
+3. Implementación de un archivo PHP (`post.php`) en el DocumentRoot para probar reglas de seguridad.
+
+### Implementación en Docker
+
+El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/WAF` dentro del repositorio. Allí también están los archivos de configuración y capturas de pantalla del proceso. 
+
+La imagen Docker generada con esta configuración está disponible en:
+
+**[apache-hardening-waf en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening-waf)**
+
+### Verificación del WAF
+
+Para comprobar que ModSecurity está funcionando correctamente, se puede realizar una prueba enviando una solicitud maliciosa. Si el firewall está bien configurado, responderá con un código **403 Forbidden** bloqueando el intento de ataque.
+
+Ejemplo de prueba con `curl`:
+
+```sh
+curl -X POST http://localhost/post.php -d "<script>alert('XSS')</script>"
+```
+
+Salida esperada:
+
+```
+HTTP/1.1 403 Forbidden
+```
+
+Este comportamiento indica que el firewall ha detectado e impedido la ejecución de un ataque XSS.
+
+---
+
 
 Con esta configuración, se mejora la seguridad del servidor Apache al restringir las fuentes desde donde se pueden cargar los recursos, mitigando así ataques XSS y de inyección de código.
 
