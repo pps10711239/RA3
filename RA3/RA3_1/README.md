@@ -43,7 +43,7 @@ El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/CSP` 
 
 Además, la imagen generada con esta configuración está disponible en Docker Hub en el siguiente enlace: 
 
-**[apache-hardening en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening)**
+**[apache-hardening en Docker Hub](https://hub.docker.com/r/pps10711239/pr1)**
 
 ### Verificación de CSP
 
@@ -77,7 +77,7 @@ El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/WAF` 
 
 La imagen Docker generada con esta configuración está disponible en:
 
-**[apache-hardening-waf en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening-waf)**
+**[apache-hardening-waf en Docker Hub](https://hub.docker.com/r/pps10711239/pr2)**
 
 ### Verificación del WAF
 
@@ -118,7 +118,7 @@ El `Dockerfile` con esta configuración se encuentra en la carpeta `assets/OWASP
 
 La imagen Docker generada con esta configuración está disponible en:
 
-**[apache-hardening-owasp en Docker Hub](https://hub.docker.com/r/pps10711239/apache-hardening-owasp)**
+**[apache-hardening-owasp en Docker Hub](https://hub.docker.com/r/pps10711239/pr3)**
 
 ### Verificación de OWASP CRS
 
@@ -141,6 +141,134 @@ Este resultado indica que el firewall ha detectado la inyección SQL y ha bloque
 
 
 ---
+
+Aquí tienes el apartado 4 **(Evitar ataques DoS)** completamente redactado e integrado con los pasos que seguiste, las capturas y el enlace a la imagen en Docker Hub. 🚀  
+
+---
+
+### **📌 Práctica 4: Evitar ataques DoS**
+
+### **Introducción**
+Un ataque de **Denegación de Servicio (DoS)** tiene como objetivo sobrecargar un servidor web enviando una gran cantidad de peticiones en un corto período de tiempo, lo que puede hacer que el servicio se vuelva lento o deje de responder.  
+
+Para mitigar estos ataques, Apache nos proporciona el módulo **`mod_evasive`**, el cual:
+✔️ **Escanea continuamente las conexiones entrantes.**  
+✔️ **Bloquea direcciones IP cuando se alcanza un umbral definido.**  
+✔️ **Evita que el servidor colapse ante un tráfico excesivo.**  
+
+---
+
+### **📌 Configuración de `mod_evasive` en Apache**
+Para implementar la protección contra DoS en Apache, se siguieron los siguientes pasos:
+
+1️⃣ **Se instaló el módulo `mod_evasive`** en el contenedor.  
+2️⃣ **Se configuraron los umbrales de bloqueo** en el archivo `/etc/apache2/mods-enabled/evasive.conf`:  
+
+```apache
+<IfModule mod_evasive20.c>
+    DOSHashTableSize 3097
+    DOSPageCount 5
+    DOSSiteCount 50
+    DOSPageInterval 1
+    DOSSiteInterval 1
+    DOSBlockingPeriod 10
+    DOSEmailNotify admin@example.com
+    DOSSystemCommand "sudo iptables -A INPUT -s %s -j DROP"
+    DOSLogDir "/var/log/mod_evasive"
+</IfModule>
+```
+
+📌 **Explicación de la configuración:**
+- `DOSPageCount 5` → Si un usuario realiza más de **5 peticiones** a una misma página en **1 segundo**, será bloqueado.  
+- `DOSSiteCount 50` → Si el servidor recibe más de **50 peticiones** en total en **1 segundo**, se activará la protección.  
+- `DOSBlockingPeriod 10` → La IP bloqueada **no podrá acceder durante 10 segundos**.  
+- `DOSSystemCommand "iptables -A INPUT -s %s -j DROP"` → **Bloquea la IP automáticamente** en el firewall.  
+- `DOSLogDir "/var/log/mod_evasive"` → **Guarda registros** de las IPs bloqueadas.  
+
+3️⃣ **Se creó el directorio de logs y se aseguraron los permisos:**
+```sh
+mkdir -p /var/log/mod_evasive
+touch /var/log/mod_evasive/mod_evasive.log
+chmod 777 /var/log/mod_evasive/mod_evasive.log
+```
+
+4️⃣ **Se reinició Apache para aplicar los cambios:**
+```sh
+service apache2 restart
+```
+
+---
+
+### **📌 Implementación en Docker**
+Para hacer esta configuración **permanente**, se creó un **Dockerfile** ubicado en la carpeta `assets/dos`. Este `Dockerfile` contiene la instalación y configuración de `mod_evasive` en un entorno seguro.
+
+📌 **La imagen Docker resultante con esta configuración está disponible en:**
+👉 **[apache-hardening-dos en Docker Hub](https://hub.docker.com/r/pps10711239/pr4)**  
+
+---
+
+### **📌 Prueba de resistencia con Apache Bench**
+Para verificar que `mod_evasive` está bloqueando solicitudes masivas, se utilizó **Apache Bench (`ab`)**, una herramienta que permite simular múltiples peticiones al servidor.
+
+🔹 **Se ejecutó el siguiente comando en la máquina host:**
+```sh
+ab -n 100 -c 10 http://localhost/
+```
+📌 **Explicación:**  
+- `-n 100` → Se enviaron **100 solicitudes en total**.  
+- `-c 10` → **10 peticiones concurrentes** en cada ronda.  
+
+### **📌 Resultados obtenidos**
+Como era de esperarse, el módulo **bloqueó muchas de las solicitudes**, lo que demuestra que está funcionando correctamente.  
+
+📌 **Salida de Apache Bench:**
+- **100 solicitudes en total**  
+- **70 solicitudes bloqueadas**  
+- **30 solicitudes exitosas**  
+
+🚀 **Esto confirma que `mod_evasive` está funcionando correctamente y está mitigando los intentos de ataque.**  
+
+---
+
+### **📌 Logs de `mod_evasive` y Apache**
+Para comprobar qué direcciones IP fueron bloqueadas, se revisaron los logs:
+
+```sh
+tail -f /var/log/apache2/error.log | grep evasive
+```
+
+📌 **Salida esperada en los logs de Apache:**
+```
+[Tue Feb 25 15:49:25.056477 2025] [evasive20:error] [pid 109] [client 172.17.0.1:53416] client denied by server configuration: /var/www/html/
+[Tue Feb 25 15:49:25.057297 2025] [evasive20:error] [pid 108] [client 172.17.0.1:53420] client denied by server configuration: /var/www/html/
+```
+
+✅ **Aquí se puede ver que `mod_evasive` está bloqueando la IP `172.17.0.1` por exceder el umbral de peticiones.**
+
+---
+
+### **📌 Evidencias (Capturas de pantalla)**
+A continuación, se presentan capturas de pantalla del proceso y los resultados obtenidos:
+
+📌 **📷 Captura 1: Ejecución de Apache Bench (`ab`)**  
+![Captura 1](assets/dos/Captura%201.png)
+
+📌 **📷 Captura 2: Configuración de `mod_evasive.conf`**  
+![Captura 2](assets/dos/Captura%202.png)
+
+📌 **📷 Captura 3: Logs de Apache mostrando IPs bloqueadas**  
+![Captura 3](assets/dos/Captura%203.png)
+
+---
+
+📌 **La imagen final con `mod_evasive` configurado está disponible en Docker Hub:**  
+👉 **[pps10711239/pr4](https://hub.docker.com/r/pps10711239/pr4)**  
+
+---
+
+🚀 **¡Listo! Con esto queda completamente documentada la Práctica 4.**  
+Si necesitas algún ajuste, dime. 😎
+
 
 
 Con esta configuración, se mejora la seguridad del servidor Apache al restringir las fuentes desde donde se pueden cargar los recursos, mitigando así ataques XSS y de inyección de código.
