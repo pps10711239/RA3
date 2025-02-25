@@ -251,13 +251,13 @@ tail -f /var/log/apache2/error.log | grep evasive
 A continuación, se presentan capturas de pantalla del proceso y los resultados obtenidos:
 
 📌 **📷 Captura 1: Ejecución de Apache Bench (`ab`)**  
-![Captura 1](assets/dos/Captura1.png)
+![Captura 1](assets/ddos/Captura1.png)
 
 📌 **📷 Captura 2: Configuración de `mod_evasive.conf`**  
-![Captura 2](assets/dos/Captura2.png)
+![Captura 2](assets/ddos/Captura2.png)
 
 📌 **📷 Captura 3: Logs de Apache mostrando IPs bloqueadas**  
-![Captura 3](assets/dos/Captura3.png)
+![Captura 3](assets/ddos/Captura3.png)
 
 ---
 
