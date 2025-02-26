@@ -27,7 +27,7 @@
 └── README.md
 ```
 
-### Descripción de los módulos:
+### Prácticas del RA3:
 
 #### 🔹 [**RA3.1 - Apache Hardening**](https://github.com/pps10711239/RA3/tree/main/RA3/RA3_1)
 Implementación de medidas de seguridad para fortalecer servidores Apache:
@@ -47,6 +47,4 @@ _Descripción breve sobre el contenido de RA3.3._
 _Descripción breve sobre el contenido de RA3.4._
 
 ---
-### Imágenes de referencia
-_Añadir aquí imágenes relevantes para cada módulo._
 
