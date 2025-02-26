@@ -359,7 +359,7 @@ service apache2 restart
 ---
 
 ### **📌 Implementación en Docker**
-Para hacer esta configuración **permanente**, se creó un **Dockerfile** ubicado en la carpeta `assets/dos`. Este `Dockerfile` contiene la instalación y configuración de `mod_evasive` en un entorno seguro.
+Para hacer esta configuración **permanente**, se creó un **Dockerfile** ubicado en la carpeta `assets/DOS`. Este `Dockerfile` contiene la instalación y configuración de `mod_evasive` en un entorno seguro.
 
 📌 **La imagen Docker resultante con esta configuración está disponible en:**
 👉 **[apache-hardening-dos en Docker Hub](https://hub.docker.com/r/pps10711239/pr4)**  
