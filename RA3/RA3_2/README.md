@@ -86,8 +86,4 @@ assets/dvwa_bruteforce.php
 ### **Ejecución del Script**
 ![Ejecución](assets/Captura4.png)
 
-## Notas
-- **Si el script no encuentra la contraseña:** Asegúrate de que DVWA está en el nivel `high` y que el `PHPSESSID` es válido.
-- **Si necesitas cambiar la lista de contraseñas:** Modifica el archivo `rockyou.txt` o usa otro diccionario.
-
 🔥 **¡Fuerza Bruta exitosa!** 🚀
