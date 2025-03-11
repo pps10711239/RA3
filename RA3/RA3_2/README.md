@@ -42,4 +42,54 @@ Ahora **DVWA** está listo para realizar pruebas de seguridad. 🛡️
 ### **Captura de la Configuración**
 A continuación, se muestra una imagen con la configuración y ejecución de los contenedores:
 
-![Configuración de DVWA en Docker](assets/Captura1.png)  
+![Configuración de DVWA en Docker](assets/Captura1.png)
+
+# Fuerza Bruta en DVWA
+
+## Descripción
+Este proyecto implementa un ataque de fuerza bruta contra la aplicación Damn Vulnerable Web Application (DVWA) en el nivel de seguridad alto. Utiliza `Hydra` y `Python` para automatizar la obtención de credenciales.
+
+## Instalación y Configuración
+1. **Clonar el repositorio**
+   ```bash
+   git clone <repositorio>
+   cd dvwa_bruteforce
+   ```
+2. **Crear un entorno virtual e instalar dependencias**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+3. **Ejecutar el script**
+   ```bash
+   python brute_high.py
+   ```
+
+## Funcionamiento del Script
+- Obtiene el token CSRF dinámicamente.
+- Usa una lista de contraseñas (`rockyou.txt`) para probar credenciales.
+- Detecta automáticamente la contraseña correcta y la muestra en pantalla.
+
+## Requisitos
+- **Python 3**
+- **Librerías:** `requests`, `BeautifulSoup4`
+- **DVWA en ejecución** con nivel de seguridad `high`
+- **Archivo `rockyou.txt`** como diccionario de contraseñas
+
+## Capturas de Pantalla
+### **Cookies en el Navegador**
+![Cookies](./Captura2.png)
+
+### **Archivos en el Directorio**
+![Archivos](./Captura3.png)
+
+### **Ejecución del Script**
+![Ejecución](./Captura4.png)
+
+
+## Notas
+- **Si el script no encuentra la contraseña:** Asegúrate de que DVWA está en el nivel `high` y que el `PHPSESSID` es válido.
+- **Si necesitas cambiar la lista de contraseñas:** Modifica el archivo `rockyou.txt` o usa otro diccionario.
+
+🔥 **¡Fuerza Bruta exitosa!** 🚀
