@@ -42,7 +42,7 @@ Ahora **DVWA** está listo para realizar pruebas de seguridad. 🛡️
 ## **Captura de la Configuración**
 A continuación, se muestra una imagen con la configuración y ejecución de los contenedores:
 
-![Configuración de DVWA en Docker](ruta/a/la/imagen.png)  
+![Configuración de DVWA en Docker](assets/Captura1.png)  
 
 *Sustituye `ruta/a/la/imagen.png` por la ubicación real de la imagen en tu repositorio o sistema.*
 
