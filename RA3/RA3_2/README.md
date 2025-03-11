@@ -108,11 +108,11 @@ En el nivel de seguridad alto, si la restricción bloquea `|`, `;` o `&`, se pue
 
 ### **Capturas de Pantalla**
 #### **Inyección de Comandos Exitosa**
-![Inyección de Comandos](./Captura5.png)
+![Inyección de Comandos](assets/Captura5.png)
 
 #### **Ruta de Ejecución en el Servidor**
 📌 La ejecución del ataque nos ha permitido conocer la ruta exacta del script vulnerable en el servidor.
-![Ejecución de Comando](./Captura\ 6.png)
+![Ejecución de Comando](assets/Captura6.png)
 
 ## **Requisitos**
 - **PHP instalado en el sistema**
