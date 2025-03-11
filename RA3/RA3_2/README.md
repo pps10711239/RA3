@@ -39,7 +39,7 @@ Este proyecto levanta **DVWA** junto con **MySQL 5.7** en contenedores Docker pa
 
 Ahora **DVWA** está listo para realizar pruebas de seguridad. 🛡️
 
-## **Captura de la Configuración**
+### **Captura de la Configuración**
 A continuación, se muestra una imagen con la configuración y ejecución de los contenedores:
 
 ![Configuración de DVWA en Docker](assets/Captura1.png)  
