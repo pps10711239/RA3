@@ -76,14 +76,15 @@ assets/dvwa_bruteforce.php
 - **Archivo `rockyou.txt`** como diccionario de contraseñas
 
 ## Capturas de Pantalla
-### **Ejecución del Script**
-![Ejecución](assets/Captura4.png)
+
+### **Cookies en el Navegador**
+![Cookies](assets/Captura2.png)
 
 ### **Archivos en el Directorio**
 ![Archivos](assets/Captura3.png)
 
-### **Cookies en el Navegador**
-![Cookies](assets/Captura2.png)
+### **Ejecución del Script**
+![Ejecución](assets/Captura4.png)
 
 ## Notas
 - **Si el script no encuentra la contraseña:** Asegúrate de que DVWA está en el nivel `high` y que el `PHPSESSID` es válido.
