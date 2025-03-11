@@ -104,21 +104,19 @@ README.md
 ```
 🔹 **Este ataque funciona en todos los niveles de seguridad: bajo, medio y alto.**
 
+En el nivel de seguridad alto, si la restricción bloquea `|`, `;` o `&`, se pueden probar técnicas alternativas como `$IFS` o `$(command)`. 
+
 ### **Capturas de Pantalla**
 #### **Inyección de Comandos Exitosa**
-![Inyección de Comandos](assets/Captura5.png)
+![Inyección de Comandos](./Captura5.png)
 
-#### **Subida de Archivo Malicioso**
-![Subida de Archivo](assets/Captura6.png)
+#### **Ruta de Ejecución en el Servidor**
+📌 La ejecución del ataque nos ha permitido conocer la ruta exacta del script vulnerable en el servidor.
+![Ejecución de Comando](./Captura\ 6.png)
 
 ## **Requisitos**
 - **PHP instalado en el sistema**
 - **Python 3 (para el script de fuerza bruta)**
 - **DVWA en ejecución** con nivel de seguridad `high`
 - **Archivo `rockyou.txt`** como diccionario de contraseñas
-
-## **Notas**
-- **Si el script de fuerza bruta no encuentra la contraseña:** Asegúrate de que DVWA está en el nivel `high` y que el `PHPSESSID` es válido.
-- **Si la inyección de comandos no funciona:** Prueba diferentes métodos como `;`, `&&`, o `$IFS`.
-- **Si necesitas cambiar la lista de contraseñas:** Modifica el archivo `rockyou.txt` o usa otro diccionario.
 
