@@ -28,7 +28,7 @@ Este proyecto levanta **DVWA** junto con **MySQL 5.7** en contenedores Docker pa
 
 4. **Acceder a la aplicación** en el navegador:
    ```
-   http://localhost/setup.php
+   http://localhost/login.php
    ```
 
 5. **Configurar la base de datos** haciendo clic en **"Create / Reset Database"**.
@@ -43,6 +43,3 @@ Ahora **DVWA** está listo para realizar pruebas de seguridad. 🛡️
 A continuación, se muestra una imagen con la configuración y ejecución de los contenedores:
 
 ![Configuración de DVWA en Docker](assets/Captura1.png)  
-
-*Sustituye `ruta/a/la/imagen.png` por la ubicación real de la imagen en tu repositorio o sistema.*
-
