@@ -57,10 +57,8 @@ A continuación, se muestra una imagen con la configuración y ejecución de los
 Se ha desarrollado un script en PHP, llamado **`dvwa_bruteforce.php`**, que automatiza un ataque de fuerza bruta contra la autenticación de DVWA en el nivel de seguridad **alto**.
 
 ## **2.2 Ubicación del Script**
-El archivo se encuentra en:
-```
-assets/dvwa_bruteforce.php
-```
+El archivo se encuentra en: [assets/dvwa_bruteforce.php](assets/rev.php.png)
+
 
 ## **2.3 Instalación y Ejecución**
 1. Asignar permisos de ejecución al script:
@@ -151,7 +149,7 @@ DVWA en nivel de seguridad **alto** presenta restricciones para la subida de arc
 ## **5.2 Subida de Archivo Malicioso**
 Para obtener una **shell inversa**, subimos un archivo PHP con una doble extensión (`.php.png`) y un encabezado falso `GIF98;` para que pase los filtros.
 
-📌 **Archivo utilizado:** `assets/rev.php.png`
+📌 **Archivo utilizado:** [assets/rev.php.png](assets/rev.php.png)
 
 El archivo fue subido exitosamente a través de la vulnerabilidad de **File Upload** en DVWA.
 
