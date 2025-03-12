@@ -143,8 +143,53 @@ La siguiente imagen muestra la explotación exitosa del ataque:
 ![Path Traversal en DVWA](assets/Captura7.png)
 
 ---
+# **6. Carga de Archivos - DVWA**
 
-# **5. Requisitos Generales**
+## **6.1 Descripción**
+DVWA en nivel de seguridad **alto** presenta restricciones para la subida de archivos maliciosos, como la validación del tipo MIME y la extensión. Sin embargo, podemos evadir estos controles utilizando técnicas como **doble extensión y manipulación de cabecera de archivos**.
+
+## **6.2 Subida de Archivo Malicioso**
+Para obtener una **shell inversa**, subimos un archivo PHP con una doble extensión (`.php.png`) y un encabezado falso `GIF98;` para que pase los filtros.
+
+📌 **Archivo utilizado:** `assets/rev.php.png`
+
+El archivo fue subido exitosamente a través de la vulnerabilidad de **File Upload** en DVWA.
+
+### **Captura de la Subida**
+![Subida Exitosa](assets/Captura8.png)
+
+## **6.3 Ejecución a Través de File Inclusion**
+Como el archivo `.php.png` no puede ejecutarse directamente, utilizamos **File Inclusion** para forzar su ejecución:
+```
+http://192.168.1.158/vulnerabilities/fi/?page=file/../../../hackable/uploads/rev.php.png
+```
+
+### **Captura de la Inclusión del Archivo**
+![Inclusión de Archivo](assets/Captura9.png)
+
+## **6.4 Conexión con Netcat**
+Desde Kali Linux, se configuró un **oyente Netcat** con:
+```bash
+nc -lvnp 4444
+```
+Al ejecutar el archivo, se obtuvo acceso al servidor con usuario `www-data`.
+
+### **Captura de la Shell Inversa**
+![Shell Inversa](assets/Captura10.png)
+
+---
+
+# **7. Requisitos Generales**
+✔ **PHP instalado en el sistema**
+✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
+✔ **DVWA en ejecución** con nivel de seguridad `high` en Docker sobre Ubuntu
+✔ **Archivo `rockyou.txt`** como diccionario de contraseñas
+
+---
+
+🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta, la inyección de comandos, el path traversal y la ejecución remota de archivos. 🔥
+
+# **Requisitos Generales**
 ✔ **PHP instalado en el sistema**
 ✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
 ✔ **DVWA en ejecución** con nivel de seguridad `high`
