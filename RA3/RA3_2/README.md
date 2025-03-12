@@ -125,7 +125,26 @@ En el nivel **alto**, si la restricción bloquea `|`, `;` o `&`, se pueden proba
 
 ---
 
-# **4. Requisitos Generales**
+# **4. Path Traversal en DVWA**
+
+## **4.1 Descripción**
+En el nivel de seguridad **alto**, existe una restricción que exige que el nombre del archivo comience con `file`.
+
+### **4.2 Bypass de Restricción**
+Podemos eludir esta restricción utilizando la siguiente carga útil:
+```bash
+file/../../../../../../etc/passwd
+```
+
+Este ataque nos permite leer archivos sensibles del sistema a través de **Path Traversal**.
+
+## **4.3 Captura de Ejecución**
+La siguiente imagen muestra la explotación exitosa del ataque:
+![Path Traversal en DVWA](assets/Captura7.png)
+
+---
+
+# **5. Requisitos Generales**
 ✔ **PHP instalado en el sistema**
 ✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
 ✔ **DVWA en ejecución** con nivel de seguridad `high`
@@ -133,5 +152,5 @@ En el nivel **alto**, si la restricción bloquea `|`, `;` o `&`, se pueden proba
 
 ---
 
-🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta y la inyección de comandos. 🔥
+🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta, la inyección de comandos y el path traversal. 🔥
 
