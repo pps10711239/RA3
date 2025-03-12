@@ -177,6 +177,53 @@ Al ejecutar el archivo, se obtuvo acceso al servidor con usuario `www-data`.
 
 ---
 
+# **6. Inyección SQL en DVWA**
+
+## **6.1 Descripción**
+DVWA en nivel de seguridad **alto** sigue siendo vulnerable a **inyección SQL**, aunque con más restricciones. Aprovecharemos esta vulnerabilidad para extraer usuarios y contraseñas almacenadas en la base de datos.
+
+## **6.2 Explotación de la Vulnerabilidad**
+En la sección de **SQL Injection**, ingresamos la siguiente carga útil en el campo de **User ID**:
+```
+' UNION SELECT user, password FROM users#
+```
+
+### **Explicación de la Carga Útil**
+- `UNION SELECT` → Nos permite unir nuestra consulta con otra para obtener información adicional.
+- `user, password FROM users` → Extrae los nombres de usuario y sus hashes de contraseña de la tabla `users`.
+- `#` → Comenta el resto de la consulta original para evitar errores.
+
+### **Captura de Ejecución**
+La siguiente imagen muestra los resultados obtenidos tras la ejecución de la inyección SQL:
+![Inyección SQL en DVWA](assets/Captura11.png)
+
+## **6.3 Descifrado de Contraseñas**
+Las contraseñas obtenidas están almacenadas en formato hash (MD5). Para descifrarlas, podemos utilizar herramientas en línea o locales.
+
+### **Método 1: CrackStation (Online)**
+1. Acceder a [https://crackstation.net/](https://crackstation.net/).
+2. Ingresar los hashes obtenidos y verificar si están en su base de datos.
+
+### **Método 2: John the Ripper (Local en Kali Linux)**
+1. Guardar los hashes en un archivo `hashes.txt`.
+2. Ejecutar el siguiente comando:
+```bash
+john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+```
+
+### **Captura de Descifrado**
+La siguiente imagen muestra el descifrado exitoso del hash `5f4dcc3b5aa765d61d8327deb882cf99`, revelando que la contraseña es `password`:
+![Descifrado de Hash](assets/Captura12.png)
+
+## **6.4 Prevención**
+Para evitar este tipo de ataques, se recomienda:
+✔ **Usar consultas preparadas (Prepared Statements)**.
+✔ **No exponer información sensible en los errores de la base de datos**.
+✔ **Implementar validación estricta de entrada de datos**.
+✔ **Utilizar métodos de hashing seguros y con sal (bcrypt, Argon2)**.
+
+---
+
 # **7. Requisitos Generales**
 ✔ **PHP instalado en el sistema**
 ✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
@@ -187,12 +234,4 @@ Al ejecutar el archivo, se obtuvo acceso al servidor con usuario `www-data`.
 
 🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta, la inyección de comandos, el path traversal y la ejecución remota de archivos. 🔥
 
-# **Requisitos Generales**
-✔ **PHP instalado en el sistema**
-✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
-✔ **DVWA en ejecución** con nivel de seguridad `high`
-✔ **Archivo `rockyou.txt`** como diccionario de contraseñas
 
----
-
-🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta, la inyección de comandos y el path traversal. 🔥
