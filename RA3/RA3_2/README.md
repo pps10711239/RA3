@@ -143,12 +143,12 @@ La siguiente imagen muestra la explotación exitosa del ataque:
 ![Path Traversal en DVWA](assets/Captura7.png)
 
 ---
-# **6. Carga de Archivos - DVWA**
+# **5. Carga de Archivos - DVWA**
 
-## **6.1 Descripción**
+## **5.1 Descripción**
 DVWA en nivel de seguridad **alto** presenta restricciones para la subida de archivos maliciosos, como la validación del tipo MIME y la extensión. Sin embargo, podemos evadir estos controles utilizando técnicas como **doble extensión y manipulación de cabecera de archivos**.
 
-## **6.2 Subida de Archivo Malicioso**
+## **5.2 Subida de Archivo Malicioso**
 Para obtener una **shell inversa**, subimos un archivo PHP con una doble extensión (`.php.png`) y un encabezado falso `GIF98;` para que pase los filtros.
 
 📌 **Archivo utilizado:** `assets/rev.php.png`
@@ -158,7 +158,7 @@ El archivo fue subido exitosamente a través de la vulnerabilidad de **File Uplo
 ### **Captura de la Subida**
 ![Subida Exitosa](assets/Captura8.png)
 
-## **6.3 Ejecución a Través de File Inclusion**
+## **5.3 Ejecución a Través de File Inclusion**
 Como el archivo `.php.png` no puede ejecutarse directamente, utilizamos **File Inclusion** para forzar su ejecución:
 ```
 http://192.168.1.158/vulnerabilities/fi/?page=file/../../../hackable/uploads/rev.php.png
