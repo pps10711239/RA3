@@ -57,7 +57,7 @@ A continuación, se muestra una imagen con la configuración y ejecución de los
 Se ha desarrollado un script en PHP, llamado **`dvwa_bruteforce.php`**, que automatiza un ataque de fuerza bruta contra la autenticación de DVWA en el nivel de seguridad **alto**.
 
 ## **2.2 Ubicación del Script**
-El archivo se encuentra en: [assets/dvwa_bruteforce.php](assets/rev.php.png)
+El archivo se encuentra en: [assets/dvwa_bruteforce.php](assets/dvwa_bruteforce.php)
 
 
 ## **2.3 Instalación y Ejecución**
