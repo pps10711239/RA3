@@ -200,16 +200,9 @@ La siguiente imagen muestra los resultados obtenidos tras la ejecución de la in
 ## **6.3 Descifrado de Contraseñas**
 Las contraseñas obtenidas están almacenadas en formato hash (MD5). Para descifrarlas, podemos utilizar herramientas en línea o locales.
 
-### **Método 1: CrackStation (Online)**
+### **CrackStation (Online)**
 1. Acceder a [https://crackstation.net/](https://crackstation.net/).
 2. Ingresar los hashes obtenidos y verificar si están en su base de datos.
-
-### **Método 2: John the Ripper (Local en Kali Linux)**
-1. Guardar los hashes en un archivo `hashes.txt`.
-2. Ejecutar el siguiente comando:
-```bash
-john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
-```
 
 ### **Captura de Descifrado**
 La siguiente imagen muestra el descifrado exitoso del hash `5f4dcc3b5aa765d61d8327deb882cf99`, revelando que la contraseña es `password`:
