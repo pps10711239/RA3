@@ -111,8 +111,6 @@ README.md
 
 🔹 **Este ataque funciona en todos los niveles de seguridad:** bajo, medio y alto.
 
-En el nivel **alto**, si la restricción bloquea `|`, `;` o `&`, se pueden probar técnicas alternativas como `$IFS` o `$(command)`.
-
 ## **3.3 Capturas de Pantalla**
 ### **Inyección de Comandos Exitosa**
 ![Inyección de Comandos](assets/Captura5.png)
