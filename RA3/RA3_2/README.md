@@ -238,8 +238,6 @@ Para evitar este tipo de ataques, se recomienda:
 ## **7.1 Descripción**
 DVWA en nivel de seguridad **alto** sigue siendo vulnerable a **inyección SQL ciega**, aunque implementa protecciones más estrictas. Se ha aprovechado esta vulnerabilidad para extraer la versión del motor de base de datos mediante fuerza bruta carácter por carácter.
 
----
-
 ## **7.2 Explotación de la Vulnerabilidad**
 
 En la sección de **SQL Injection (Blind)**, se configuró manualmente una cookie vulnerable con la siguiente carga útil:
@@ -250,7 +248,6 @@ En la sección de **SQL Injection (Blind)**, se configuró manualmente una cooki
 
 ✅ Al establecer esta cookie, la respuesta del servidor tarda aproximadamente **5 segundos**, confirmando que la inyección es posible.
 
----
 
 ## **7.3 Script Utilizado**
 
@@ -258,7 +255,6 @@ Para automatizar la extracción de la versión de la base de datos, se desarroll
 
 El contenido del script se encuentra aquí --> [assets/blind_sqli_high.py](assets/blind_sqli_high.py) 
 
----
 
 ## **7.4 Resultado Obtenido**
 
@@ -271,8 +267,6 @@ Tras ejecutar el script, se logró detectar la longitud y extraer completamente 
 [1] 5 [2] . [3] 7 [4] . [5] 4 [6] 4
 ✅ Versión extraída: 5.7.44
 ```
-
----
 
 ## **7.5 Capturas de Pantalla**
 
@@ -289,7 +283,6 @@ Tras ejecutar el script, se logró detectar la longitud y extraer completamente 
 ## **8.1 Descripción**
 DVWA en niveles de seguridad **bajo** y **medio** presenta vulnerabilidades en la generación de **identificadores de sesión (Session IDs)**, permitiendo su predicción y posible secuestro de sesiones por parte de un atacante.
 
----
 
 ## **8.2 Explotación de la Vulnerabilidad**
 
@@ -307,16 +300,12 @@ En la sección de **Weak Session IDs**, se analizaron las cookies generadas tras
   ✅ **Cómo se podría explotar:**  
   Si un atacante conoce el rango de tiempo aproximado en el que la víctima inició sesión, puede calcular y probar varios valores de `dvwaSession` cercanos para intentar secuestrar su sesión.
 
----
-
 ## **8.3 Resultado Obtenido**
 
 Tras generar varias sesiones y examinar sus cookies, se pudo confirmar la predictibilidad de los identificadores en los niveles **low** y **medium**:
 
 - **Low:** ID incremental sencillo y totalmente predecible.
 - **Medium:** ID basado en la hora, más difícil pero no imposible de adivinar si se conoce el momento aproximado de creación.
-
----
 
 ## **8.4 Capturas de Pantalla**
 
@@ -333,7 +322,6 @@ Tras generar varias sesiones y examinar sus cookies, se pudo confirmar la predic
 En DVWA, la vulnerabilidad de **DOM Based XSS** se debe a que los datos del usuario se manipulan en el cliente (navegador) en vez de en el servidor.  
 En el nivel de seguridad **alto**, aunque el servidor utiliza una **lista blanca** para validar entradas, es posible inyectar código malicioso aprovechando que **todo lo que está después del `#` en la URL no es enviado al servidor**, pero sí es procesado por el navegador.
 
----
 
 ## **9.2 Explotación de la Vulnerabilidad**
 
@@ -347,8 +335,6 @@ En la sección de **DOM Based Cross Site Scripting (XSS)**, se utilizó el sigui
 
 ✅ El ataque se basa en que el navegador interpreta el contenido después del `#` como parte del DOM y no lo envía al servidor, evadiendo así las protecciones de la whitelist.
 
----
-
 ## **9.3 Resultado Obtenido**
 
 Al acceder a la siguiente URL:
@@ -358,8 +344,6 @@ http://192.168.1.158/vulnerabilities/xss_d/?default=Spanish#<script>alert(docume
 ```
 
 Se muestra un **pop-up de alerta** que revela el valor actual de las cookies de sesión.
-
----
 
 ## **9.4 Capturas de Pantalla**
 
@@ -375,8 +359,6 @@ Se muestra un **pop-up de alerta** que revela el valor actual de las cookies de 
 
 ## **10.1 Descripción**
 En **DVWA** bajo nivel de seguridad **alto**, sigue siendo vulnerable a **Cross Site Scripting Reflejado (Reflected XSS)**. El campo de **name** refleja directamente el valor introducido sin una validación adecuada, permitiendo la ejecución de código JavaScript malicioso.
-
----
 
 ## **10.2 Explotación de la Vulnerabilidad**
 
@@ -394,8 +376,6 @@ En la sección de **Reflected XSS**, se ha utilizado el siguiente **payload** pa
 
 Este ataque funciona en **todos los niveles de seguridad**: bajo, medio y alto.
 
----
-
 ## **10.3 Capturas de Pantalla**
 
 ### **Inyección de Payload**
@@ -406,7 +386,6 @@ Este ataque funciona en **todos los niveles de seguridad**: bajo, medio y alto.
 
 ---
 
-
 # **11. Cross Site Scripting (Stored XSS) en DVWA**
 
 ## **11.1 Descripción**
@@ -414,8 +393,6 @@ DVWA en su sección de **Stored XSS** permite almacenar cargas maliciosas que lu
 Esto puede derivar en robo de cookies, secuestro de sesión y otros ataques contra usuarios legítimos.
 
 Se ha comprobado la vulnerabilidad en los niveles de seguridad **bajo** y **medio**.
-
----
 
 ## **11.2 Explotación de la Vulnerabilidad**
 
@@ -428,8 +405,7 @@ En el nivel bajo, DVWA permite insertar directamente código malicioso en el cam
 ```
 
 ✅ Al enviar el formulario, el script es almacenado y se ejecuta automáticamente al cargar la página, mostrando un **alert** con las cookies de sesión.
-
----
+-
 
 ### **Nivel de Seguridad: Medio**
 En el nivel medio, se impone una restricción de **longitud máxima** en el campo de entrada, pero esta protección puede ser **fácilmente evadida**.
@@ -445,28 +421,23 @@ En el nivel medio, se impone una restricción de **longitud máxima** en el camp
 
 ✅ Nuevamente, el código fue almacenado y ejecutado correctamente.
 
----
 
 ## **11.3 Capturas de Pantalla**
 
 ### **Payload inyectado en Nivel Bajo**
 📸 ![Payload Low Stored XSS](assets/Captura21.png)
 
----
 
 ### **Almacenamiento y ejecución del Payload (Nivel Bajo)**
 📸 ![Ejecución Stored XSS Bajo](assets/Captura22.png)
 
----
 
 ### **Inyección de Payload Evadiendo Filtros (Nivel Medio)**
 📸 ![Payload Bypass Medio](assets/Captura23.png)
 
----
 
 ### **Ejecución Exitosa del Payload (Nivel Medio)**
 📸 ![Ejecución Stored XSS Medio](assets/Captura24.png)
-
 ---
 
 # **12. Content Security Policy (CSP) Bypass en DVWA**
@@ -474,7 +445,6 @@ En el nivel medio, se impone una restricción de **longitud máxima** en el camp
 ## **12.1 Descripción**
 En el nivel de seguridad **alto** de DVWA, la aplicación implementa una política de seguridad de contenido (**CSP**) para restringir la ejecución de código JavaScript no autorizado. No obstante, se ha identificado una vulnerabilidad que permite eludir esta protección manipulando el parámetro `callback` en una solicitud JSONP.
 
----
 
 ## **12.2 Explotación de la Vulnerabilidad**
 
@@ -488,13 +458,9 @@ callback=alert(document.cookie)
 ```
 De esta forma, al procesar la respuesta JSONP, el navegador ejecuta el código JavaScript arbitrario proporcionado.
 
----
-
 ## **12.3 Herramienta Utilizada**
 
 Para la interceptación y modificación de la solicitud, se utilizó **Burp Suite** en modo proxy, permitiendo alterar el tráfico antes de que fuera procesado por el servidor.
-
----
 
 ## **12.4 Resultado Obtenido**
 
@@ -505,7 +471,6 @@ PHPSESSID=b83d2feb1a6cf85aa0710bb1b08837f3; security=high
 
 Este resultado confirma que es posible eludir la política CSP configurada.
 
----
 
 ## **12.5 Evidencias**
 
@@ -522,7 +487,6 @@ Este resultado confirma que es posible eludir la política CSP configurada.
 ## **13.1 Descripción**
 En esta sección de DVWA, se explota la manipulación del parámetro `phrase` y su correspondiente `token` para conseguir validar la acción requerida. El nivel de seguridad incrementa la complejidad de la generación del token.
 
----
 
 ## **13.2 Explotación de la Vulnerabilidad**
 
@@ -572,8 +536,6 @@ El procedimiento realizado fue:
    ```
 
 ✅ La validación fue exitosa, demostrando que se logró ajustar el valor del token según la lógica implementada para el nivel medio.
-
----
 
 ## **13.3 Resultado Obtenido**
 
