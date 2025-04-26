@@ -351,3 +351,39 @@ Se muestra un **pop-up de alerta** que revela el valor actual de las cookies de 
 ### **Ejecución Exitosa del Payload**
 📸 ![Pop-up con Cookie](assets/Captura18.png)
 
+---
+
+# **10. Cross Site Scripting Reflejado (Reflected XSS) en DVWA**
+
+## **10.1 Descripción**
+En **DVWA** bajo nivel de seguridad **alto**, sigue siendo vulnerable a **Cross Site Scripting Reflejado (Reflected XSS)**. El campo de **name** refleja directamente el valor introducido sin una validación adecuada, permitiendo la ejecución de código JavaScript malicioso.
+
+---
+
+## **10.2 Explotación de la Vulnerabilidad**
+
+En la sección de **Reflected XSS**, se ha utilizado el siguiente **payload** para explotar la vulnerabilidad:
+
+```
+<img src=x onerror="alert(document.cookie)">
+```
+
+✅ Al insertar esta carga útil en el campo de **"What's your name?"**, conseguimos ejecutar código JavaScript y hacer aparecer una alerta con las cookies del navegador.
+
+### **Explicación**
+- `<img src=x>`: Intenta cargar una imagen no válida.
+- `onerror="alert(document.cookie)"`: Al fallar la carga de la imagen, se ejecuta el evento `onerror`, que lanza una alerta con las cookies.
+
+Este ataque funciona en **todos los niveles de seguridad**: bajo, medio y alto.
+
+---
+
+## **10.3 Capturas de Pantalla**
+
+### **Inyección de Payload**
+📸 ![Inyección del Payload en el Campo Name](assets/Captura19.png)
+
+### **Ejecución del Payload y Visualización de la Cookie**
+📸 ![Ejecución de XSS Reflejado y Alerta de Cookie](assets/Captura20.png)
+
+
