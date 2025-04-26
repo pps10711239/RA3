@@ -266,4 +266,46 @@ Tras ejecutar el script, se logró detectar la longitud y extraer completamente 
 
 ---
 
+# **8. Identificadores de Sesión Débiles (Weak Session IDs) en DVWA**
+
+## **8.1 Descripción**
+DVWA en niveles de seguridad **bajo** y **medio** presenta vulnerabilidades en la generación de **identificadores de sesión (Session IDs)**, permitiendo su predicción y posible secuestro de sesiones por parte de un atacante.
+
+---
+
+## **8.2 Explotación de la Vulnerabilidad**
+
+En la sección de **Weak Session IDs**, se analizaron las cookies generadas tras pulsar el botón **Generate**, observándose el siguiente comportamiento:
+
+- **Nivel Bajo:**  
+  El valor de la cookie `dvwaSession` es completamente **predecible**, empezando en `0` y aumentando de uno en uno (`0`, `1`, `2`, `3`, etc.) con cada nueva generación.
+
+  ✅ **Cómo se podría explotar:**  
+  Un atacante podría ir probando secuencialmente diferentes valores (`0`, `1`, `2`, etc.) hasta encontrar una sesión activa perteneciente a otro usuario, logrando así suplantarlo.
+
+- **Nivel Medio:**  
+  El valor de `dvwaSession` se genera utilizando la función **`time()`** de PHP, que proporciona un valor basado en el tiempo actual en segundos.
+
+  ✅ **Cómo se podría explotar:**  
+  Si un atacante conoce el rango de tiempo aproximado en el que la víctima inició sesión, puede calcular y probar varios valores de `dvwaSession` cercanos para intentar secuestrar su sesión.
+
+---
+
+## **8.3 Resultado Obtenido**
+
+Tras generar varias sesiones y examinar sus cookies, se pudo confirmar la predictibilidad de los identificadores en los niveles **low** y **medium**:
+
+- **Low:** ID incremental sencillo y totalmente predecible.
+- **Medium:** ID basado en la hora, más difícil pero no imposible de adivinar si se conoce el momento aproximado de creación.
+
+---
+
+## **8.4 Capturas de Pantalla**
+
+### **Cookie Predecible (Nivel Bajo)**
+📸 ![Weak Session ID - Low](assets/Captura15.png)
+
+### **Cookie Basada en Timestamp (Nivel Medio)**
+📸 ![Weak Session ID - Medium](assets/Captura16.png)
+
 
