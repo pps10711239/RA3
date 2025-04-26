@@ -449,3 +449,51 @@ En el nivel medio, se impone una restricción de **longitud máxima** en el camp
 ### **Ejecución Exitosa del Payload (Nivel Medio)**
 📸 ![Ejecución Stored XSS Medio](assets/Captura24.png)
 
+---
+
+# **12. Content Security Policy (CSP) Bypass en DVWA**
+
+## **12.1 Descripción**
+En el nivel de seguridad **alto** de DVWA, la aplicación implementa una política de seguridad de contenido (**CSP**) para restringir la ejecución de código JavaScript no autorizado. No obstante, se ha identificado una vulnerabilidad que permite eludir esta protección manipulando el parámetro `callback` en una solicitud JSONP.
+
+---
+
+## **12.2 Explotación de la Vulnerabilidad**
+
+La aplicación realiza una solicitud a la siguiente ruta para cargar código adicional:
+```
+/vulnerabilities/csp/source/jsonp.php?callback=solveSum
+```
+Mediante el uso de un proxy de interceptación, como **Burp Suite**, se capturó esta solicitud HTTP y se modificó el valor del parámetro `callback`, reemplazándolo por una función maliciosa:
+```
+callback=alert(document.cookie)
+```
+De esta forma, al procesar la respuesta JSONP, el navegador ejecuta el código JavaScript arbitrario proporcionado.
+
+---
+
+## **12.3 Herramienta Utilizada**
+
+Para la interceptación y modificación de la solicitud, se utilizó **Burp Suite** en modo proxy, permitiendo alterar el tráfico antes de que fuera procesado por el servidor.
+
+---
+
+## **12.4 Resultado Obtenido**
+
+Tras modificar la solicitud, el navegador ejecutó correctamente el código inyectado, mostrando una alerta con el valor de la cookie de sesión:
+```
+PHPSESSID=b83d2feb1a6cf85aa0710bb1b08837f3; security=high
+```
+
+Este resultado confirma que es posible eludir la política CSP configurada.
+
+---
+
+## **12.5 Evidencias**
+
+### **Interceptación y Modificación de la Solicitud**
+📸 ![Interceptación y Modificación de la Solicitud](assets/Captura26.png)
+
+### **Ejecución del Código Inyectado**
+📸 ![Ejecución Exitosa del Payload](assets/Captura27.png)
+
