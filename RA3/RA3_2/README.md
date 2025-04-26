@@ -265,3 +265,5 @@ Tras ejecutar el script, se logró detectar la longitud y extraer completamente 
 📸 ![Ejecución del Script en Nivel Alto](assets/Captura14.png)
 
 ---
+
+
