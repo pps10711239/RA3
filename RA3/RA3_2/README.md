@@ -497,3 +497,71 @@ Este resultado confirma que es posible eludir la política CSP configurada.
 ### **Ejecución del Código Inyectado**
 📸 ![Ejecución Exitosa del Payload](assets/Captura27.png)
 
+---
+
+# **13. JavaScript Attacks en DVWA**
+
+## **13.1 Descripción**
+En esta sección de DVWA, se explota la manipulación del parámetro `phrase` y su correspondiente `token` para conseguir validar la acción requerida. El nivel de seguridad incrementa la complejidad de la generación del token.
+
+---
+
+## **13.2 Explotación de la Vulnerabilidad**
+
+### **Nivel de Seguridad: Bajo**
+
+En este nivel, para que la aplicación acepte la entrada, es necesario enviar:
+- La `phrase` igual a `success`
+- El `token` generado como `md5(rot13(phrase))`
+
+El proceso seguido fue el siguiente:
+
+1. Aplicar **ROT13** a la palabra `success`, obteniendo:
+   ```
+   fhpprff
+   ```
+2. Calcular el **hash MD5** de `fhpprff`, resultando en:
+   ```
+   38581812b435834ebf84ebcc2c6424d6
+   ```
+3. Finalmente, enviar ambos parámetros:
+   ```
+   token=38581812b435834ebf84ebcc2c6424d6&phrase=success
+   ```
+
+✅ La aplicación aceptó la respuesta, validando correctamente la manipulación de los valores.
+
+---
+
+### **Nivel de Seguridad: Medio**
+
+En este nivel, la generación del token cambia ligeramente:
+- Se construye como `"XX"` + reverso de la frase (`success`) + `"XX"`
+
+El procedimiento realizado fue:
+
+1. Invertir la palabra `success`, obteniendo:
+   ```
+   sseccus
+   ```
+2. Añadir el prefijo y sufijo `"XX"`, resultando en:
+   ```
+   XXsseccusXX
+   ```
+3. Enviar los siguientes parámetros:
+   ```
+   token=XXsseccusXX&phrase=success
+   ```
+
+✅ La validación fue exitosa, demostrando que se logró ajustar el valor del token según la lógica implementada para el nivel medio.
+
+---
+
+## **13.3 Resultado Obtenido**
+
+- En **nivel bajo**, se logró eludir la verificación aplicando ROT13 y MD5.
+- En **nivel medio**, se consiguió construir el token siguiendo el patrón de inversión y añadido de prefijos/sufijos.
+
+---
+
+
