@@ -386,4 +386,66 @@ Este ataque funciona en **todos los niveles de seguridad**: bajo, medio y alto.
 ### **Ejecución del Payload y Visualización de la Cookie**
 📸 ![Ejecución de XSS Reflejado y Alerta de Cookie](assets/Captura20.png)
 
+---
+
+
+# **11. Cross Site Scripting (Stored XSS) en DVWA**
+
+## **11.1 Descripción**
+DVWA en su sección de **Stored XSS** permite almacenar cargas maliciosas que luego son ejecutadas cuando otros usuarios visualizan la página afectada.  
+Esto puede derivar en robo de cookies, secuestro de sesión y otros ataques contra usuarios legítimos.
+
+Se ha comprobado la vulnerabilidad en los niveles de seguridad **bajo** y **medio**.
+
+---
+
+## **11.2 Explotación de la Vulnerabilidad**
+
+### **Nivel de Seguridad: Bajo**
+En el nivel bajo, DVWA permite insertar directamente código malicioso en el campo **Message** del formulario de comentarios.
+
+- **Payload utilizado:**
+```html
+<img src=x onerror="alert(document.cookie)">
+```
+
+✅ Al enviar el formulario, el script es almacenado y se ejecuta automáticamente al cargar la página, mostrando un **alert** con las cookies de sesión.
+
+---
+
+### **Nivel de Seguridad: Medio**
+En el nivel medio, se impone una restricción de **longitud máxima** en el campo de entrada, pero esta protección puede ser **fácilmente evadida**.
+
+**Evasión realizada:**
+- Se modificó dinámicamente el atributo `maxlength` del campo de entrada desde **DevTools** del navegador.
+- Se cambió el payload usando variaciones de mayúsculas/minúsculas para evitar filtros.
+
+- **Payload utilizado:**
+```html
+<sCrIpT>alert(document.cookie);</ScRiPt>
+```
+
+✅ Nuevamente, el código fue almacenado y ejecutado correctamente.
+
+---
+
+## **11.3 Capturas de Pantalla**
+
+### **Payload inyectado en Nivel Bajo**
+📸 ![Payload Low Stored XSS](assets/Captura21.png)
+
+---
+
+### **Almacenamiento y ejecución del Payload (Nivel Bajo)**
+📸 ![Ejecución Stored XSS Bajo](assets/Captura22.png)
+
+---
+
+### **Inyección de Payload Evadiendo Filtros (Nivel Medio)**
+📸 ![Payload Bypass Medio](assets/Captura23.png)
+
+---
+
+### **Ejecución Exitosa del Payload (Nivel Medio)**
+📸 ![Ejecución Stored XSS Medio](assets/Captura24.png)
 
