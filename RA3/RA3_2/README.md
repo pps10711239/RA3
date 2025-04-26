@@ -2,6 +2,24 @@
 
 Este proyecto despliega **DVWA** junto con **MySQL 5.7** en contenedores Docker, proporcionando un entorno seguro para practicar pruebas de seguridad web.
 
+
+# **Índice**
+
+- [1. Instalación y Puesta en Marcha](#1-instalación-y-puesta-en-marcha)
+- [2. Fuerza Bruta en DVWA](#2-fuerza-bruta-en-dvwa)
+- [3. Inyección de Comandos en DVWA](#3-inyección-de-comandos-en-dvwa)
+- [4. Path Traversal en DVWA](#4-path-traversal-en-dvwa)
+- [5. Carga de Archivos - DVWA](#5-carga-de-archivos---dvwa)
+- [6. Inyección SQL en DVWA](#6-inyección-sql-en-dvwa)
+- [7. Inyección SQL Ciega (Blind SQL Injection) en DVWA](#7-inyección-sql-ciega-blind-sql-injection-en-dvwa)
+- [8. Identificadores de Sesión Débiles (Weak Session IDs) en DVWA](#8-identificadores-de-sesión-débiles-weak-session-ids-en-dvwa)
+- [9. DOM Based Cross Site Scripting (XSS) en DVWA](#9-dom-based-cross-site-scripting-xss-en-dvwa)
+- [10. Cross Site Scripting Reflejado (Reflected XSS) en DVWA](#10-cross-site-scripting-reflejado-reflected-xss-en-dvwa)
+- [11. Cross Site Scripting (Stored XSS) en DVWA](#11-cross-site-scripting-stored-xss-en-dvwa)
+- [12. Content Security Policy (CSP) Bypass en DVWA](#12-content-security-policy-csp-bypass-en-dvwa)
+- [13. JavaScript Attacks en DVWA](#13-javascript-attacks-en-dvwa)
+
+
 ---
 
 ## **1. Instalación y Puesta en Marcha**
