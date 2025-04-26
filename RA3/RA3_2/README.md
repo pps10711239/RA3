@@ -215,14 +215,53 @@ Para evitar este tipo de ataques, se recomienda:
 
 ---
 
-# **7. Requisitos Generales**
-✔ **PHP instalado en el sistema**
-✔ **Python 3 (para el script de fuerza bruta, si es necesario)**
-✔ **DVWA en ejecución** con nivel de seguridad `high` en Docker sobre Ubuntu
-✔ **Archivo `rockyou.txt`** como diccionario de contraseñas
+# **7. Inyección SQL Ciega (Blind SQL Injection) en DVWA**
+
+## **7.1 Descripción**
+DVWA en nivel de seguridad **alto** sigue siendo vulnerable a **inyección SQL ciega**, aunque implementa protecciones más estrictas. Se ha aprovechado esta vulnerabilidad para extraer la versión del motor de base de datos mediante fuerza bruta carácter por carácter.
 
 ---
 
-🎯 Con esta configuración, ya puedes realizar pruebas de seguridad web con DVWA y experimentar con técnicas de ataque como la fuerza bruta, la inyección de comandos, el path traversal y la ejecución remota de archivos. 🔥
+## **7.2 Explotación de la Vulnerabilidad**
 
+En la sección de **SQL Injection (Blind)**, se configuró manualmente una cookie vulnerable con la siguiente carga útil:
 
+```
+1' and sleep(5)#
+```
+
+✅ Al establecer esta cookie, la respuesta del servidor tarda aproximadamente **5 segundos**, confirmando que la inyección es posible.
+
+---
+
+## **7.3 Script Utilizado**
+
+Para automatizar la extracción de la versión de la base de datos, se desarrolló un script en Python llamado **`blind_sqli_high.py`**, ubicado en la carpeta `assets/`.
+
+El contenido del script se encuentra aquí --> [assets/blind_sqli_high.py](assets/blind_sqli_high.py) 
+
+---
+
+## **7.4 Resultado Obtenido**
+
+Tras ejecutar el script, se logró detectar la longitud y extraer completamente la versión de la base de datos:
+
+```
+[*] Detectando longitud de la versión...
+✅ Longitud detectada: 6
+[*] Extrayendo versión de la base de datos...
+[1] 5 [2] . [3] 7 [4] . [5] 4 [6] 4
+✅ Versión extraída: 5.7.44
+```
+
+---
+
+## **7.5 Capturas de Pantalla**
+
+### **Inyección de Payload en Cookie**
+📸 ![Payload inyectado en Cookie](assets/Captura13.png)
+
+### **Ejecución del Script y Extracción Exitosa**
+📸 ![Ejecución del Script en Nivel Alto](assets/Captura14.png)
+
+---
