@@ -307,5 +307,47 @@ Tras generar varias sesiones y examinar sus cookies, se pudo confirmar la predic
 
 ### **Cookie Basada en Timestamp (Nivel Medio)**
 📸 ![Weak Session ID - Medium](assets/Captura16.png)
+---
 
+# **9. DOM Based Cross Site Scripting (XSS) en DVWA**
+
+## **9.1 Descripción**
+En DVWA, la vulnerabilidad de **DOM Based XSS** se debe a que los datos del usuario se manipulan en el cliente (navegador) en vez de en el servidor.  
+En el nivel de seguridad **alto**, aunque el servidor utiliza una **lista blanca** para validar entradas, es posible inyectar código malicioso aprovechando que **todo lo que está después del `#` en la URL no es enviado al servidor**, pero sí es procesado por el navegador.
+
+---
+
+## **9.2 Explotación de la Vulnerabilidad**
+
+En la sección de **DOM Based Cross Site Scripting (XSS)**, se utilizó el siguiente payload para explotar la vulnerabilidad:
+
+```
+#<script>alert(document.cookie);</script>
+```
+
+✅ Al añadir este payload después del parámetro `default` en la URL, logramos ejecutar JavaScript arbitrario en el navegador.
+
+✅ El ataque se basa en que el navegador interpreta el contenido después del `#` como parte del DOM y no lo envía al servidor, evadiendo así las protecciones de la whitelist.
+
+---
+
+## **9.3 Resultado Obtenido**
+
+Al acceder a la siguiente URL:
+
+```
+http://192.168.1.158/vulnerabilities/xss_d/?default=Spanish#<script>alert(document.cookie);</script>
+```
+
+Se muestra un **pop-up de alerta** que revela el valor actual de las cookies de sesión.
+
+---
+
+## **9.4 Capturas de Pantalla**
+
+### **Payload Inyectado en la URL**
+📸 ![Payload Inyectado](assets/Captura17.png)
+
+### **Ejecución Exitosa del Payload**
+📸 ![Pop-up con Cookie](assets/Captura18.png)
 
